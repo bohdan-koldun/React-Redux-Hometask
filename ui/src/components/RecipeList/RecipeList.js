@@ -7,7 +7,7 @@ export default ({ recipes, onEdit, onDelete, onView }) => (
         {recipes && recipes.map((recipe, index) => (
             <Card key={index}>
                 <Card.Content style={{textAlign: 'left'}}>
-                    <Image size="tiny" floated="right" src={dish} />
+                    <Image sizзаe="tiny" floated="right" src={dish} />
                     <Card.Header>
                         {recipe.title}  
                     </Card.Header>

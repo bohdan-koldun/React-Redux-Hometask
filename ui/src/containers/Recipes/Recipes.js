@@ -9,6 +9,7 @@ import logo from '../../images/logo.png';
 import RecipeList from '../../components/RecipeList/RecipeList';
 import RecipeListHeader from '../../components/RecipeList/RecipeListHeader';
 import EmptyRecipeList from '../../components/RecipeList/EmptyRecipeList';
+import EmptySearchResult from '../../components/RecipeSearch/EmptySearchResult';
 import RecipeModal from '../../components/RecipeModal/RecipeModal';
 
 class Recipes extends React.Component {
@@ -16,7 +17,8 @@ class Recipes extends React.Component {
         super(props);
 
         this.state = {
-            activeRecipe: null
+            activeRecipe: null,
+            searchKey: ''
         };
     }
 
@@ -24,12 +26,27 @@ class Recipes extends React.Component {
         this.props.actions.fetchAllRecipes();
     }
 
-    handleDelete = id => {
-        this.props.actions.deleteRecipe(id);
+    handleSearch = _searchKey => {
+        this.setState({
+            searchKey: _searchKey
+        });
+
+        console.log(this.state.searchKey);
+    }
+
+    filterRecipeList(allRecipes, keyWord) {
+        return allRecipes.filter(function (item) {
+            return item.title.toLowerCase().search(keyWord.toLowerCase()) !== -1;
+        });
+        // this.setState({items: filteredList});
     }
 
     handleEdit = id => {
         this.props.history.push(`/recipes/${id}`);
+    }
+
+    handleDelete = id => {
+        this.props.actions.deleteRecipe(id);
     }
 
     handleRecipeCreate = () => {
@@ -48,7 +65,12 @@ class Recipes extends React.Component {
 
     render() {
         const { isFetching, allRecipes } = this.props;
-        const { activeRecipe } = this.state;
+        const { activeRecipe, searchKey } = this.state;
+
+        let allRecipesFiltered = allRecipes;
+
+        if (searchKey !== '')
+            allRecipesFiltered = this.filterRecipeList(allRecipes, searchKey);
 
         return (<Container>
             <Grid centered columns={1}>
@@ -60,12 +82,16 @@ class Recipes extends React.Component {
                         <Segment raised padded textAlign="center" loading={isFetching}>
                             {
                                 !allRecipes.length && !isFetching
-                                ? <EmptyRecipeList onCreate={this.handleRecipeCreate} />
-                                : <React.Fragment>
-                                    <RecipeListHeader onCreate={this.handleRecipeCreate} listLength={allRecipes.length} />
-                                    <Divider />
-                                    <RecipeList recipes={allRecipes} onView={this.toggleRecipeModal} onDelete={this.handleDelete} onEdit={this.handleEdit} />
-                                </React.Fragment>
+                                    ? <EmptyRecipeList onCreate={this.handleRecipeCreate} />
+                                    : <React.Fragment>
+                                        <RecipeListHeader onSearch={this.handleSearch} onCreate={this.handleRecipeCreate} listLength={allRecipesFiltered.length} />
+                                        <Divider />
+                                        {
+                                            !!allRecipesFiltered.length
+                                                ? <RecipeList recipes={allRecipesFiltered} onView={this.toggleRecipeModal} onEdit={this.handleEdit} onDelete={this.handleDelete} />
+                                                : <EmptySearchResult />
+                                        }
+                                    </React.Fragment>
                             }
                         </Segment>
                     </Grid.Column>
@@ -87,8 +113,8 @@ const mapStateToProps = state => ({
     isFetching: isRecipesFetching(state)
 });
 
-const mapDispatchToProps =  dispatch => ({
-    actions: bindActionCreators({fetchAllRecipes,deleteRecipe}, dispatch)
+const mapDispatchToProps = dispatch => ({
+    actions: bindActionCreators({ fetchAllRecipes, deleteRecipe }, dispatch)
 });
 
-export default connect(mapStateToProps,  mapDispatchToProps)(Recipes);
+export default connect(mapStateToProps, mapDispatchToProps)(Recipes);

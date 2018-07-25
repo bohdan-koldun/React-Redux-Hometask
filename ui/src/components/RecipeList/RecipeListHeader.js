@@ -1,13 +1,11 @@
 import React from 'react';
+import RecipeSearch from '../RecipeSearch/RecipeSearch';
 import { Button, Container, Input } from 'semantic-ui-react';
 
-export default ({ onCreate, listLength }) => (
+export default ({ onSearch, onCreate, listLength }) => (
     <Container style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
-        <Input
-            action={{ color: 'blue', labelPosition: 'right', icon: 'search', content: 'Search' }}
-            placeholder='Search...'
-        />
+        <RecipeSearch onSearch={onSearch}/>
         <Button
             color='green'
             content='Add recipe'
