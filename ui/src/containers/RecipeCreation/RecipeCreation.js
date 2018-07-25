@@ -21,16 +21,16 @@ class Recipe extends React.Component {
         const {isFetching} = this.props;
 
         return <Container>
-            <Grid centered columns={2}>
+            <Grid columns={2} centered >
             <Grid.Column>
                 <RecipeForm
                 disabled ={isFetching}
-                title="Specify new recipe"
+                title="Add new recipe"
                 onSubmit={this.handleSubmit}
                 onCancel={this.handleCancel}
                 submitButtonTitle ="Add recipe"
                 submitButtonIcon="plus"
-                cancelButtonTitle="Go back to recipes"
+                cancelButtonTitle="Go back"
                 cancelButtonIcon="arrow left"
                 />
             </Grid.Column>

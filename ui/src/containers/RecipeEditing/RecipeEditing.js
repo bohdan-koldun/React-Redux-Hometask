@@ -54,7 +54,7 @@ class RecipeEditing extends React.Component {
         const { isFetching, recipe } = this.props;
 
         return <Container>
-            <Grid centered columns={2}>
+            <Grid columns={2} centered>
                 <Grid.Column>
                 {
                    !!recipe && <RecipeForm
@@ -62,10 +62,10 @@ class RecipeEditing extends React.Component {
                         title="Edit recipe"
                         onSubmit={this.handleSubmit}
                         onCancel={this.handleCancel}
-                        submitButtonTitle="Update recipe"
+                        submitButtonTitle="Save changes recipe"
                         initialValues={recipe}
                         submitButtonIcon="save outline"
-                        cancelButtonTitle="Go back to recipes"
+                        cancelButtonTitle="Go back"
                         cancelButtonIcon="arrow left"
 
                     />

@@ -3,8 +3,11 @@ import { Input } from 'semantic-ui-react';
 
 export default ({ onSearch }) => (
     <Input
-        action={{ color: 'blue', labelPosition: 'right', icon: 'search', content: 'Search' }}
+        icon='search' 
+        iconPosition='left'
         placeholder='Search...'
+        label={{ tag: true, color: 'blue', content: 'Search recipes' }}
+        labelPosition='right'
         onChange={(e) => onSearch && onSearch(e.target.value)}
     />
 );

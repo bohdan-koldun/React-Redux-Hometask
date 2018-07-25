@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Container, Divider, Image, Grid, Segment } from 'semantic-ui-react';
-import { fetchAllRecipes, deleteRecipe } from './RecipesActions';
+import { fetchAllRecipes, deleteRecipe, updateRecipeRating  } from './RecipesActions';
 import { allRecipes, isRecipesFetching } from './RecipesReducer';
 import logo from '../../images/logo.png';
 import RecipeList from '../../components/RecipeList/RecipeList';
@@ -30,15 +30,12 @@ class Recipes extends React.Component {
         this.setState({
             searchKey: _searchKey
         });
-
-        console.log(this.state.searchKey);
     }
 
     filterRecipeList(allRecipes, keyWord) {
         return allRecipes.filter(function (item) {
             return item.title.toLowerCase().search(keyWord.toLowerCase()) !== -1;
         });
-        // this.setState({items: filteredList});
     }
 
     handleEdit = id => {
@@ -47,6 +44,16 @@ class Recipes extends React.Component {
 
     handleDelete = id => {
         this.props.actions.deleteRecipe(id);
+    }
+
+    handleChangeRating = (id, rating) => {
+        console.log(id, rating);
+
+        let recipe = this.props.allRecipes.find(r => r._id === id);
+        recipe.rating = rating;
+        console.log(recipe);
+        this.props.actions.updateRecipeRating(recipe);
+      
     }
 
     handleRecipeCreate = () => {
@@ -88,7 +95,13 @@ class Recipes extends React.Component {
                                         <Divider />
                                         {
                                             !!allRecipesFiltered.length
-                                                ? <RecipeList recipes={allRecipesFiltered} onView={this.toggleRecipeModal} onEdit={this.handleEdit} onDelete={this.handleDelete} />
+                                                ? <RecipeList
+                                                    recipes={allRecipesFiltered}
+                                                    onRate={this.handleChangeRating}
+                                                    onView={this.toggleRecipeModal}
+                                                    onEdit={this.handleEdit}
+                                                    onDelete={this.handleDelete}
+                                                />
                                                 : <EmptySearchResult />
                                         }
                                     </React.Fragment>
@@ -114,7 +127,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    actions: bindActionCreators({ fetchAllRecipes, deleteRecipe }, dispatch)
+    actions: bindActionCreators({ fetchAllRecipes, deleteRecipe, updateRecipeRating }, dispatch)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Recipes);

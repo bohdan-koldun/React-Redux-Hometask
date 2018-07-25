@@ -10,6 +10,9 @@ export default {
     updateRecipe: recipe => {
         return api.makeRequest(`/api/recipes/${recipe._id}`, api.requestType.PATCH, recipe);
     },
+    updateRecipeRating: recipe => {
+        return api.makeRequest(`/api/recipes/rating/${recipe._id}`, api.requestType.PATCH, recipe);
+    },
     deleteRecipe: id => {
         return api.makeRequest(`/api/recipes/${id}`, api.requestType.DELETE);
     },

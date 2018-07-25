@@ -16,6 +16,9 @@ class RecipeService {
 	updateRecipe(id, recipe) {
 		return recipeRepository.update({ _id: id }, recipe);
 	}
+	updateRecipeRaiting(id, recipe) {
+		return recipeRepository.update({ _id: id }, recipe);
+	}
 
 	deleteRecipe(id) {
 		return recipeRepository.delete({ _id: id });
