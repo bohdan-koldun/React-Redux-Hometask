@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Container, Divider, Image, Grid, Segment } from 'semantic-ui-react';
-import { fetchAllRecipes, deleteRecipe, updateRecipeRating  } from './RecipesActions';
+import { fetchAllRecipes, deleteRecipe, updateRecipeRating } from './RecipesActions';
 import { allRecipes, isRecipesFetching } from './RecipesReducer';
 import logo from '../../images/logo.png';
 import RecipeList from '../../components/RecipeList/RecipeList';
@@ -18,7 +18,8 @@ class Recipes extends React.Component {
 
         this.state = {
             activeRecipe: null,
-            searchKey: ''
+            searchKey: '',
+            ratingFilter: 'none'
         };
     }
 
@@ -32,10 +33,32 @@ class Recipes extends React.Component {
         });
     }
 
-    filterRecipeList(allRecipes, keyWord) {
+    handleRatingFilter = filter => {
+        this.setState({
+            ratingFilter: filter
+        });
+
+        if (filter === 'none')
+            this.props.history.push(`/recipes`);
+    }
+
+    filterRecipeListBySearch(allRecipes, keyWord) {
         return allRecipes.filter(function (item) {
             return item.title.toLowerCase().search(keyWord.toLowerCase()) !== -1;
         });
+    }
+
+    filterRecipeListByRating(allRecipes, filter) {
+        if (filter === 'increasing')
+            return allRecipes.sort((a, b) => {
+                return a.rating - b.rating;
+            });
+        else if (filter === 'descending')
+            return allRecipes.sort((a, b) => {
+                return b.rating - a.rating;
+            });
+        else
+            return allRecipes;
     }
 
     handleEdit = id => {
@@ -47,13 +70,9 @@ class Recipes extends React.Component {
     }
 
     handleChangeRating = (id, rating) => {
-        console.log(id, rating);
-
         let recipe = this.props.allRecipes.find(r => r._id === id);
         recipe.rating = rating;
-        console.log(recipe);
         this.props.actions.updateRecipeRating(recipe);
-      
     }
 
     handleRecipeCreate = () => {
@@ -72,12 +91,19 @@ class Recipes extends React.Component {
 
     render() {
         const { isFetching, allRecipes } = this.props;
-        const { activeRecipe, searchKey } = this.state;
+        const { activeRecipe, searchKey, ratingFilter } = this.state;
 
         let allRecipesFiltered = allRecipes;
 
         if (searchKey !== '')
-            allRecipesFiltered = this.filterRecipeList(allRecipes, searchKey);
+            allRecipesFiltered = this.filterRecipeListBySearch(allRecipes, searchKey);
+
+
+        if (ratingFilter === 'descending' || ratingFilter === 'increasing')
+            allRecipesFiltered = this.filterRecipeListByRating(allRecipesFiltered, ratingFilter);
+
+
+
 
         return (<Container>
             <Grid centered columns={1}>
@@ -91,7 +117,7 @@ class Recipes extends React.Component {
                                 !allRecipes.length && !isFetching
                                     ? <EmptyRecipeList onCreate={this.handleRecipeCreate} />
                                     : <React.Fragment>
-                                        <RecipeListHeader onSearch={this.handleSearch} onCreate={this.handleRecipeCreate} listLength={allRecipesFiltered.length} />
+                                        <RecipeListHeader onSearch={this.handleSearch} onChooseFilter={this.handleRatingFilter} onCreate={this.handleRecipeCreate} listLength={allRecipesFiltered.length} />
                                         <Divider />
                                         {
                                             !!allRecipesFiltered.length

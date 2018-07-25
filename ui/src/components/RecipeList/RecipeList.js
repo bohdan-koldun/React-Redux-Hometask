@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, Button, Card} from 'semantic-ui-react';
-import RecipeRating from '../Rating/Rating';
+import RecipeRating from '../Rating/RecipeRating';
 import dish from '../../images/dish.png';
 
 export default ({ recipes, onEdit, onDelete, onView, onRate }) => (
@@ -12,7 +12,7 @@ export default ({ recipes, onEdit, onDelete, onView, onRate }) => (
                     <Card.Header>
                         {recipe.title}  
                     </Card.Header>
-                    <Card.Meta style={{marginTop: '7px'}}><RecipeRating rating = {recipe.rating} onRate={(e, {rating}) => onRate && onRate(recipe._id, rating)} /></Card.Meta>
+                    <Card.Meta style={{marginTop: '7px'}}><RecipeRating key={recipe.title} rating = {recipe.rating} onRate={(e, {rating}) => onRate && onRate(recipe._id, rating)} /></Card.Meta>
                     <Card.Description>
                         {recipe.description}
                     </Card.Description>

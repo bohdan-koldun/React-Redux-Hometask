@@ -1,11 +1,13 @@
 import React from 'react';
 import RecipeSearch from '../RecipeSearch/RecipeSearch';
 import { Button, Container} from 'semantic-ui-react';
+import RatingFilter from '../Filters/RatingFilter';
 
-export default ({ onSearch, onCreate, listLength }) => (
+export default ({ onSearch, onChooseFilter, onCreate, listLength }) => (
     <Container style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
 
         <RecipeSearch onSearch={onSearch}/>
+        <RatingFilter onChooseFilter={onChooseFilter} />
         <Button
             color='orange'
             content='Add new recipe'

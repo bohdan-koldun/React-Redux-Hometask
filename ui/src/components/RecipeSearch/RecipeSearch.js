@@ -6,7 +6,7 @@ export default ({ onSearch }) => (
         icon='search' 
         iconPosition='left'
         placeholder='Search...'
-        label={{ tag: true, color: 'blue', content: 'Search recipes' }}
+        label={{ tag: true, color: 'black', content: 'Search recipes' }}
         labelPosition='right'
         onChange={(e) => onSearch && onSearch(e.target.value)}
     />
