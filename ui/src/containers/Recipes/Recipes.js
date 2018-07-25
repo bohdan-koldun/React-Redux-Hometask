@@ -11,6 +11,7 @@ import RecipeListHeader from '../../components/RecipeList/RecipeListHeader';
 import EmptyRecipeList from '../../components/RecipeList/EmptyRecipeList';
 import EmptySearchResult from '../../components/RecipeSearch/EmptySearchResult';
 import RecipeModal from '../../components/RecipeModal/RecipeModal';
+import AllRecipeListModal from '../../components/RecipeModal/AllRecipeListModal';
 
 class Recipes extends React.Component {
     constructor(props) {
@@ -18,6 +19,7 @@ class Recipes extends React.Component {
 
         this.state = {
             activeRecipe: null,
+            listRecipe: null,
             searchKey: '',
             ratingFilter: 'none'
         };
@@ -86,12 +88,29 @@ class Recipes extends React.Component {
     }
 
     handleModalClose = () => {
-        this.toggleRecipeModal(null);
+        this.toggleRecipeModal(false);
+    }
+
+    toggleRecipeListModal = (show) => {
+        if (show) {
+            this.setState({
+                listRecipe: this.props.allRecipes
+            });
+        }
+        else {
+            this.setState({
+                listRecipe: null
+            });
+        }
+    }
+
+    handleModalListClose = () => {
+        this.toggleRecipeListModal(false);
     }
 
     render() {
         const { isFetching, allRecipes } = this.props;
-        const { activeRecipe, searchKey, ratingFilter } = this.state;
+        const { activeRecipe, searchKey, ratingFilter, listRecipe } = this.state;
 
         let allRecipesFiltered = allRecipes;
 
@@ -117,7 +136,13 @@ class Recipes extends React.Component {
                                 !allRecipes.length && !isFetching
                                     ? <EmptyRecipeList onCreate={this.handleRecipeCreate} />
                                     : <React.Fragment>
-                                        <RecipeListHeader onSearch={this.handleSearch} onChooseFilter={this.handleRatingFilter} onCreate={this.handleRecipeCreate} listLength={allRecipesFiltered.length} />
+                                        <RecipeListHeader
+                                            onSearch={this.handleSearch}
+                                            onChooseFilter={this.handleRatingFilter}
+                                            onCreate={this.handleRecipeCreate}
+                                            onViewAll = {this.toggleRecipeListModal}
+                                            listLength={allRecipesFiltered.length}
+                                        />
                                         <Divider />
                                         {
                                             !!allRecipesFiltered.length
@@ -136,6 +161,7 @@ class Recipes extends React.Component {
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
+            <AllRecipeListModal recipes={listRecipe} onClose={this.handleModalListClose} />
             <RecipeModal recipe={activeRecipe} onClose={this.handleModalClose} />
         </Container>)
     }
