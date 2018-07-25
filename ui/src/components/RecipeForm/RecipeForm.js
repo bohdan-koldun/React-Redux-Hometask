@@ -71,7 +71,7 @@ export default class RecipeForm extends React.Component {
                         onChange={this.handleFieldChange}
                         disabled={disabled}
                     />
-
+                    <label>Set Rating:</label><br/><br/>
                     <Rating
                         maxRating={5}
                         defaultRating={this.state.rating}

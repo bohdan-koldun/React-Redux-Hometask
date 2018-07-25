@@ -27,7 +27,7 @@ const options = [
 export default ({onChooseFilter}) => (
   <Header as='h4'>
     <Icon name='chart line' />
-    <Header.Content>
+    <Header.Content color='black'>
       Sort rating{' '}
       <Dropdown
         inline

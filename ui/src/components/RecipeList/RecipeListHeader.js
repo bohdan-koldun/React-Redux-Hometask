@@ -5,20 +5,20 @@ import RatingFilter from '../Filters/RatingFilter';
 
 export default ({ onSearch, onChooseFilter, onCreate, onViewAll, listLength }) => (
     <Container style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-
-        <RecipeSearch onSearch={onSearch}/>
         <RatingFilter onChooseFilter={onChooseFilter} />
+        <RecipeSearch onSearch={onSearch}/>
         <Button
             content='Show All Recipes'
             icon='eye'
             color='blue'
+            label={{ basic: true, color: 'black', pointing: 'left', content: listLength }}
             onClick={() => onViewAll && onViewAll(true)}
         />
         <Button
             color='orange'
             content='Add new recipe'
             icon='plus'
-            label={{ basic: true, color: 'blue', pointing: 'left', content: listLength }}
+            label={{ basic: true, color: 'black', pointing: 'left', content: listLength }}
             onClick={() => onCreate && onCreate()}
         />
     </Container>
